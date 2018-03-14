@@ -2,18 +2,17 @@ package top.krawczak.michal.matchinfo
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.directives.LoggingMagnet._
 import akka.stream.ActorMaterializer
 import akkahttptwirl.TwirlSupport
 import com.github.tototoshi.csv._
-import top.krawczak.michal.matchinfo.domain.{Competition, DataSet}
-import top.krawczak.michal.matchinfo.domain.raw.RawMatchAction
+import top.krawczak.michal.matchinfo.domain.{DataSet}
+import top.krawczak.michal.matchinfo.domain.raw.RawAction
+import top.krawczak.michal.matchinfo.server.Routes
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
 
-object MatchInfo extends TwirlSupport {
+object MatchInfo extends TwirlSupport with Routes {
   /**
     * Location of the dataset (in CSV) inside resources dir.
     *
@@ -37,7 +36,7 @@ object MatchInfo extends TwirlSupport {
 
   lazy val data: DataSet = {
     val reader = CSVReader open (Source fromResource datasetLocation)
-    val rawData = reader.toStreamWithHeaders map RawMatchAction.fromList
+    val rawData = reader.toStreamWithHeaders map RawAction.fromMap
     DataSet fromRaw rawData
   }
 
@@ -47,33 +46,5 @@ object MatchInfo extends TwirlSupport {
     implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     Http().bindAndHandle(routes, host, port)
-  }
-
-  import TwirlSupport.twirlHtmlMarshaller
-  import akka.http.scaladsl.marshalling.PredefinedToResponseMarshallers.fromToEntityMarshaller
-  val routes = {
-    logRequestResult("matchinfo") {
-      get {
-        pathEndOrSingleSlash {
-          complete {
-            html.main render data
-          }
-        } ~
-        path("competition" / Segment) { competitionId =>
-          rejectEmptyResponse {
-            complete {
-              data competitionById competitionId map html.competition.render
-            }
-          }
-        } ~
-        path("competition" / Segment / "match" / Segment) { (competitionId, matchId) =>
-          rejectEmptyResponse {
-            complete {
-              data competitionById competitionId flatMap (_ matchById matchId) map html.match_.render
-            }
-          }
-        }
-      }
-    }
   }
 }
