@@ -4,33 +4,24 @@ import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
 
 import scala.util.Try
-import io.circe.
 
-case class MatchAction(actionId: String,
-                       competition: String,
-                       matchId: String,
-                       date: Date,
-                       action: String,
-                       period: Option[String],
-                       startTime: Option[Long],
-                       endTime: Option[Long],
-                       homeOrAway: Option[String],
-                       teamId: Option[String],
-                       team: Option[String],
-                       personId: Option[String],
-                       persion: Option[String],
-                       function: Option[String],
-                       shirtNr: Option[String],
-                       actionReason: Option[String],
-                       actionInfo: Option[String],
-                       subpersonId: Option[String],
-                       subperson: Option[String])
+case class Action(period: Option[String],
+                  startTime: Option[Long],
+                  endTime: Option[Long],
+                  homeOrAway: Option[String],
+                  team: Option[String],
+                  persion: Option[String],
+                  function: Option[String],
+                  shirtNr: Option[String],
+                  actionReason: Option[String],
+                  actionInfo: Option[String],
+                  subperson: Option[String])
 
-object MatchAction {
+object Action {
   def fromList(map: Map[String, String]) = {
     def optionalString(key: String) = toStringOption(map.get(key))
     def optionalLong(key: String) = toNumberOption(map.get(key))
-    MatchAction(
+    Action(
       actionId = map("n_actionid"),
       competition = map("c_competition"),
       matchId = map("n_Matchid"),

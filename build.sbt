@@ -12,7 +12,6 @@ resolvers ++= Seq(
 enablePlugins(SbtTwirl)
 
 val dependencies = Seq(
-  "com.typesafe.akka" %% "akka-stream" % "2.5.9",
   "com.typesafe.akka" %% "akka-http" % "10.0.11",
   "com.github.tototoshi" %% "scala-csv" % "1.3.5",
   "btomala" %% "akka-http-twirl" % "1.2.0"

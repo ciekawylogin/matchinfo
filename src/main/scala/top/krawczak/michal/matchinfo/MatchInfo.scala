@@ -1,21 +1,20 @@
 package top.krawczak.michal.matchinfo
 
-import java.io.File
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.directives.LoggingMagnet._
 import akka.stream.ActorMaterializer
+import akkahttptwirl.TwirlSupport
 import com.github.tototoshi.csv._
-import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport
-import top.krawczak.michal.matchinfo.domain.MatchAction
+import top.krawczak.michal.matchinfo.domain.raw.MatchAction
 
+import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
-import io.circe._, 
-io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
 
-object MatchInfo extends ErrorAccumulatingCirceSupport{
+
+object MatchInfo extends TwirlSupport {
   /**
     * Location of the dataset (in CSV) inside resources dir.
     *
@@ -39,23 +38,26 @@ object MatchInfo extends ErrorAccumulatingCirceSupport{
 
   lazy val data = {
     val reader = CSVReader open (Source fromResource datasetLocation)
-    reader.iteratorWithHeaders map MatchAction.fromList
+    reader.toStreamWithHeaders map MatchAction.fromList
   }
 
   def main(args: Array[String]): Unit = {
-    implicit val system = ActorSystem()
-    implicit val executor = system.dispatcher
-    implicit val materializer = ActorMaterializer()
+    implicit val system: ActorSystem = ActorSystem()
+    implicit val executor: ExecutionContextExecutor = system.dispatcher
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     Http().bindAndHandle(routes, host, port)
   }
 
 
   val routes = {
-    logRequestResult("akka-http-microservice") {
+    import TwirlSupport.twirlHtmlMarshaller
+    logRequestResult("matchinfo") {
       get {
         path("match" / Segment) { segment =>
-          complete(data.toArray.head)
+          complete {
+            html.twirl.render(data.head)
+          }
         }
       }
     }
