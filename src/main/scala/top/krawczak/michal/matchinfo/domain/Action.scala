@@ -1,6 +1,6 @@
 package top.krawczak.michal.matchinfo.domain
 
-import top.krawczak.michal.matchinfo.domain.raw.RawMatchAction
+import top.krawczak.michal.matchinfo.domain.raw.RawAction
 
 case class Action(period: Option[String],
                   action: String,
@@ -16,10 +16,13 @@ case class Action(period: Option[String],
                   subperson: Option[String]) {
   def isHome: Boolean = homeOrAway contains "Home"
   def isAway: Boolean = homeOrAway contains "Away"
+
+  def isSubstitution: Boolean = action == "Substitution"
+  def isLineUp: Boolean = action == "Line-up"
 }
 
 object Action {
-  def fromRaw(raw: RawMatchAction) = Action(
+  def fromRaw(raw: RawAction) = Action(
     period = raw.period,
     action = raw.action,
     startTime = raw.startTime,

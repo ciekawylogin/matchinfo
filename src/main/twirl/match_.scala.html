@@ -13,28 +13,41 @@
 
 @displayLineUps(lineUps: Seq[Action]) = {
     <table class="colored">
+        <thead>Line-ups</thead>
         <tr><th>No</th><th>Name</th><th>Function</th></tr>
         @for(lineUp <- lineUps) {
-            <tr><td> @lineUp.shirtNr </td> <td> @lineUp.person </td> <td> @lineUp.function </td></tr>
+            <tr>
+                <td> @lineUp.shirtNr </td>
+                <td> @lineUp.person </td>
+                <td> @lineUp.function </td>
+            </tr>
         }
     </table>
 }
 
 @displaySubstitutions(substitutions: Seq[Action]) = {
     <table class="colored">
-        <thead>@(name getOrElse "?")</thead>
-        <tr><th>No</th><th>Name</th><th>Function</th></tr>
-        @for(lineUp <- lineUps) {
-            <tr><td> @lineUp.shirtNr </td> <td> @lineUp.person </td> <td> @lineUp.function </td></tr>
+        <thead>Substitutions</thead>
+        <tr><th>Time</th><th>Player</th><th>Replaced by</th></tr>
+        @for(substitution <- substitutions) {
+            <tr>
+                <td> @substitution.shirtNr </td>
+                <td> @substitution.subperson </td>
+                <td> @substitution.person </td>
+            </tr>
         }
     </table>
 }
 
-<h1>Match @mmatch.host vs @mmatch.guest</h1>
+<h1>Match @mmatch.hostTeam vs @mmatch.guestTeam</h1>
 <p><a href="/">Back to competitions list</a></p>
 
 <table><tr><td>
-    @displayLineUps(mmatch.host, mmatch.hostLineUps)
+    <h3>@mmatch.hostTeam</h3>
+    @displayLineUps(mmatch.hostLineUps)
+    @displaySubstitutions(mmatch.hostSubstitutions)
 </td><td>
-    @displayLineUps(mmatch.guest, mmatch.guestLineUps)
+    <h3>@mmatch.guestTeam</h3>
+    @displayLineUps(mmatch.guestLineUps)
+    @displaySubstitutions(mmatch.guestSubstitutions)
 </tr></table>

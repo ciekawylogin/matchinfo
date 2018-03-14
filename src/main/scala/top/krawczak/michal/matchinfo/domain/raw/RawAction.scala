@@ -5,31 +5,41 @@ import java.util.{Date, Locale}
 
 import scala.util.Try
 
-case class RawMatchAction(actionId: String,
-                          competition: String,
-                          matchId: String,
-                          date: Date,
-                          action: String,
-                          period: Option[String],
-                          startTime: Option[Long],
-                          endTime: Option[Long],
-                          homeOrAway: Option[String],
-                          teamId: Option[String],
-                          team: Option[String],
-                          personId: Option[String],
-                          person: Option[String],
-                          function: Option[String],
-                          shirtNr: Option[String],
-                          actionReason: Option[String],
-                          actionInfo: Option[String],
-                          subpersonId: Option[String],
-                          subperson: Option[String])
+/**
+  * Holds a single row read from the CSV, i.e. a single action.
+  *
+  * TODO Many of these fields are actually enum values (for example `action`, `period`, `function`).
+  *      It would be better to represent them as enum-like types instead of string.
+  */
+case class RawAction(actionId: String,
+                     competition: String,
+                     matchId: String,
+                     date: Date,
+                     action: String,
+                     period: Option[String],
+                     startTime: Option[Long],
+                     endTime: Option[Long],
+                     homeOrAway: Option[String],
+                     teamId: Option[String],
+                     team: Option[String],
+                     personId: Option[String],
+                     person: Option[String],
+                     function: Option[String],
+                     shirtNr: Option[String],
+                     actionReason: Option[String],
+                     actionInfo: Option[String],
+                     subpersonId: Option[String],
+                     subperson: Option[String])
 
-object RawMatchAction {
-  def fromList(map: Map[String, String]) = {
+object RawAction {
+  /**
+    * Given a map where each property of an action is represented by a single entry with a known
+    * key, convert it to a [[RawAction]].
+    */
+  def fromMap(map: Map[String, String]) = {
     def optionalString(key: String) = toStringOption(map.get(key))
     def optionalLong(key: String) = toNumberOption(map.get(key))
-    RawMatchAction(
+    RawAction(
       actionId = map("n_actionid"),
       competition = map("c_competition"),
       matchId = map("n_Matchid"),

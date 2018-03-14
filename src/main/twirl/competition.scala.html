@@ -13,8 +13,16 @@
 <h1>Competition @competition.name</h1>
 <p><a href="/">Back to competitions list</a></p>
 <table>
+    <thead>Matches:</thead>
     <tr><th>Time</th> <th> Teams </th></tr>
-@for(match_ <- competition.matches) {
-    <tr><td>@match_.time </td><td> <a href="/competition/@competition.id/match/@match_.id">@match_.host vs @match_.guest</a> </td></tr>
-}
+    @for(match_ <- competition.matches) {
+        <tr><td> @match_.time </td><td> <a href="/competition/@competition.id/match/@match_.id">@match_.host vs @match_.guest</a> </td></tr>
+    }
+</table>
+<table>
+    <thead>Best scorers:</thead>
+    <tr><th>Name</th> <th> Goals</th> <th>Team</th></tr>
+    @for(player <- competition.bestScorers) {
+        <tr><td> @player.name </td><td> @player.goals </td><td> @player.team </td></tr>
+    }
 </table>

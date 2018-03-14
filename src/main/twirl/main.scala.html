@@ -1,5 +1,12 @@
 @import top.krawczak.michal.matchinfo.domain.DataSet
 @(dataset: DataSet)
+
+<style>
+        body {font-family: sans-serif; }
+        a {color: black; text-decoration: none;}
+        a:hover {color: #209d6f}
+</style>
+
 <h1>Competitions</h1>
 <ul>
 @for(competition <- dataset.competitions) {
