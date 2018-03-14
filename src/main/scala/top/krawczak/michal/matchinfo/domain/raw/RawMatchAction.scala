@@ -37,7 +37,7 @@ object RawMatchAction {
       action = map("c_Action"),
       period = optionalString("c_Period"),
       startTime = optionalLong("n_StartTime"),
-      endTime = optionalLong("n_EndTime"),
+      endTime = optionalLong("n_Endtime"),
       homeOrAway = optionalString("c_HomeOrAway"),
       teamId = optionalString("n_TeamID"),
       team = optionalString("c_Team"),
@@ -67,5 +67,5 @@ object RawMatchAction {
     if (input.isEmpty || input.contains("NULL"))
       None
     else
-      Try(input.get.toLong).toOption
+      Try(input.get.trim.toLong).toOption
 }

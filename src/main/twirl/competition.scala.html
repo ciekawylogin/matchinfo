@@ -1,9 +1,20 @@
 @import top.krawczak.michal.matchinfo.domain.Competition
 @(competition: Competition)
+
+<style>
+        body {font-family: sans-serif; }
+        a {color: black; text-decoration: none;}
+        a:hover {color: #209d6f}
+        tr:nth-child(even) {background: #Cfe}
+        tr:nth-child(odd) {background: #9Ca}
+        td {padding: 5px}
+</style>
+
 <h1>Competition @competition.name</h1>
 <p><a href="/">Back to competitions list</a></p>
-<ul>
+<table>
+    <tr><th>Time</th> <th> Teams </th></tr>
 @for(match_ <- competition.matches) {
-    <li><a href="/competition/@competition.id/match/@match_.id"> @match_.time </a></li>
+    <tr><td>@match_.time </td><td> <a href="/competition/@competition.id/match/@match_.id">@match_.host vs @match_.guest</a> </td></tr>
 }
-</ul>
+</table>

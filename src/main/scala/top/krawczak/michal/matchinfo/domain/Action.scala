@@ -3,6 +3,7 @@ package top.krawczak.michal.matchinfo.domain
 import top.krawczak.michal.matchinfo.domain.raw.RawMatchAction
 
 case class Action(period: Option[String],
+                  action: String,
                   startTime: Option[Long],
                   endTime: Option[Long],
                   homeOrAway: Option[String],
@@ -20,6 +21,7 @@ case class Action(period: Option[String],
 object Action {
   def fromRaw(raw: RawMatchAction) = Action(
     period = raw.period,
+    action = raw.action,
     startTime = raw.startTime,
     endTime = raw.endTime,
     homeOrAway = raw.homeOrAway,

@@ -65,6 +65,13 @@ object MatchInfo extends TwirlSupport {
               data competitionById competitionId map html.competition.render
             }
           }
+        } ~
+        path("competition" / Segment / "match" / Segment) { (competitionId, matchId) =>
+          rejectEmptyResponse {
+            complete {
+              data competitionById competitionId flatMap (_ matchById matchId) map html.match_.render
+            }
+          }
         }
       }
     }
