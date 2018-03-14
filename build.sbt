@@ -14,7 +14,8 @@ enablePlugins(SbtTwirl)
 val dependencies = Seq(
   "com.typesafe.akka" %% "akka-http" % "10.0.11",
   "com.github.tototoshi" %% "scala-csv" % "1.3.5",
-  "btomala" %% "akka-http-twirl" % "1.2.0"
+  "btomala" %% "akka-http-twirl" % "1.2.0",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
 libraryDependencies ++= dependencies
