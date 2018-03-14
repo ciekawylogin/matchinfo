@@ -8,7 +8,6 @@ import top.krawczak.michal.matchinfo.domain.DataSet
 
 trait Routes {
   import TwirlSupport.twirlHtmlMarshaller
-  import akka.http.scaladsl.marshalling.PredefinedToResponseMarshallers.fromToEntityMarshaller
 
   protected def routes(data: DataSet): Route = {
     logRequestResult("matchinfo") {

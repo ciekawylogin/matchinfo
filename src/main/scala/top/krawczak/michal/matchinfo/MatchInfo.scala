@@ -4,8 +4,8 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akkahttptwirl.TwirlSupport
-import input.CSVDataLoader
-import server.Routes
+import top.krawczak.michal.matchinfo.input.CSVDataLoader
+import top.krawczak.michal.matchinfo.server.Routes
 
 import scala.concurrent.ExecutionContextExecutor
 

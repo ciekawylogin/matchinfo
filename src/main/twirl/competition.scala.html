@@ -16,7 +16,7 @@
     <thead>Matches:</thead>
     <tr><th>Time</th> <th> Teams </th></tr>
     @for(match_ <- competition.matches) {
-        <tr><td> @match_.time </td><td> <a href="/competition/@competition.id/match/@match_.id">@match_.host vs @match_.guest</a> </td></tr>
+        <tr><td> @match_.time </td><td> <a href="/competition/@competition.id/match/@match_.id">@match_.hostTeam vs @match_.guestTeam</a> </td></tr>
     }
 </table>
 <table>
