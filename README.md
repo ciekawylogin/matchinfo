@@ -7,11 +7,17 @@ Sample Scala application that loads data about football matches from CSV and dis
 
 To launch the application, type:
 
-```$xslt
+```
 sbt run
 ```
 
 It will run the server on `localhost:8080`.
+
+To launch unit tests, run:
+
+```
+sbt test
+```
 
  # Input data
 The data is loaded from `main/resources/dataset.csv`. The structure is not documented, so take a look at the example file.
