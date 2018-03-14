@@ -11,8 +11,8 @@ To launch the application, type:
 sbt run
 ```
 
-It will run the server on `localhost:8080`. You can change the port by modifying the `MatchInfo.scala` file.
- 
+It will run the server on `localhost:8080`.
+
  # Input data
 The data is loaded from `main/resources/dataset.csv`. The structure is not documented, so take a look at the example file.
 
