@@ -7,12 +7,11 @@ import akka.http.scaladsl.server.directives.LoggingMagnet._
 import akka.stream.ActorMaterializer
 import akkahttptwirl.TwirlSupport
 import com.github.tototoshi.csv._
-import top.krawczak.michal.matchinfo.domain.raw.MatchAction
+import top.krawczak.michal.matchinfo.domain.{Competition, DataSet}
+import top.krawczak.michal.matchinfo.domain.raw.RawMatchAction
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.Source
-
-
 
 object MatchInfo extends TwirlSupport {
   /**
@@ -36,9 +35,10 @@ object MatchInfo extends TwirlSupport {
     */
   val host = "localhost"
 
-  lazy val data = {
+  lazy val data: DataSet = {
     val reader = CSVReader open (Source fromResource datasetLocation)
-    reader.toStreamWithHeaders map MatchAction.fromList
+    val rawData = reader.toStreamWithHeaders map RawMatchAction.fromList
+    DataSet fromRaw rawData
   }
 
   def main(args: Array[String]): Unit = {
@@ -49,14 +49,21 @@ object MatchInfo extends TwirlSupport {
     Http().bindAndHandle(routes, host, port)
   }
 
-
+  import TwirlSupport.twirlHtmlMarshaller
+  import akka.http.scaladsl.marshalling.PredefinedToResponseMarshallers.fromToEntityMarshaller
   val routes = {
-    import TwirlSupport.twirlHtmlMarshaller
     logRequestResult("matchinfo") {
       get {
-        path("match" / Segment) { segment =>
+        pathEndOrSingleSlash {
           complete {
-            html.twirl.render(data.head)
+            html.main render data
+          }
+        } ~
+        path("competition" / Segment) { competitionId =>
+          rejectEmptyResponse {
+            complete {
+              data competitionById competitionId map html.competition.render
+            }
           }
         }
       }

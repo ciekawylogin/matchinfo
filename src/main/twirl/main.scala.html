@@ -1,0 +1,8 @@
+@import top.krawczak.michal.matchinfo.domain.DataSet
+@(dataset: DataSet)
+<h1>Competitions</h1>
+<ul>
+@for(competition <- dataset.competitions) {
+    <li><a href="/competition/@competition.id"> @competition.name </a></li>
+}
+</ul>

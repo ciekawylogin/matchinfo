@@ -1,0 +1,9 @@
+@import top.krawczak.michal.matchinfo.domain.Competition
+@(competition: Competition)
+<h1>Competition @competition.name</h1>
+<p><a href="/">Back to competitions list</a></p>
+<ul>
+@for(match_ <- competition.matches) {
+    <li><a href="/competition/@competition.id/match/@match_.id"> @match_.time </a></li>
+}
+</ul>
