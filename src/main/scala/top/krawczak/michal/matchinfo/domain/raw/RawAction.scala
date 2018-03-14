@@ -16,20 +16,20 @@ case class RawAction(actionId: String,
                      matchId: String,
                      date: Date,
                      action: String,
-                     period: Option[String],
-                     startTime: Option[Long],
-                     endTime: Option[Long],
-                     homeOrAway: Option[String],
-                     teamId: Option[String],
-                     team: Option[String],
-                     personId: Option[String],
-                     person: Option[String],
-                     function: Option[String],
-                     shirtNr: Option[String],
-                     actionReason: Option[String],
-                     actionInfo: Option[String],
-                     subpersonId: Option[String],
-                     subperson: Option[String])
+                     period: Option[String] = None,
+                     startTime: Option[Long] = None,
+                     endTime: Option[Long] = None,
+                     homeOrAway: Option[String] = None,
+                     teamId: Option[String] = None,
+                     team: Option[String] = None,
+                     personId: Option[String] = None,
+                     person: Option[String] = None,
+                     function: Option[String] = None,
+                     shirtNr: Option[String] = None,
+                     actionReason: Option[String] = None,
+                     actionInfo: Option[String] = None,
+                     subpersonId: Option[String] = None,
+                     subperson: Option[String] = None)
 
 object RawAction {
   /**
@@ -62,17 +62,26 @@ object RawAction {
     )
   }
 
+  /**
+    * Given a date in `dd-MMMM-yyyy HH:mm` format, convert it to Java [[Date]].
+    */
   private[this] def parseDateTime(input: String): Date = {
     val formatter = new SimpleDateFormat("dd-MMMM-yyyy HH:mm", Locale.US)
     formatter.parse(input)
   }
 
+  /**
+    * Given a string which can be "NULL", convert it to [[Option]].
+    */
   private[this] def toStringOption(input: Option[String]): Option[String] =
     if (input.isEmpty || input.contains("NULL"))
       None
     else
       input
 
+  /**
+    * Given a string which can be empty, "NULL" or a number, convert it to [[Option]]'al [[Long]].
+    */
   private[this] def toNumberOption(input: Option[String]): Option[Long] =
     if (input.isEmpty || input.contains("NULL"))
       None

@@ -3,10 +3,16 @@ package top.krawczak.michal.matchinfo.domain
 import top.krawczak.michal.matchinfo.domain.raw.RawAction
 
 case class Competition(id: String, name: String, matches: Seq[Match]) {
+  /**
+    * Find a match by its ID or return [[None]] if not found.
+    */
   def matchById(id: String): Option[Match] = matches.find(_.id == id)
 
   val numBestScorers = 10
-  
+
+  /**
+    * Fetch the list of [[numBestScorers]] best scorers, in descending order.
+    */
   def bestScorers: Seq[Player] = {
     matches
       .flatMap(_.actions)
@@ -20,12 +26,16 @@ case class Competition(id: String, name: String, matches: Seq[Match]) {
 }
 
 object Competition {
-  def fromRaw(competitionId: String, competitionName: String, matches: Seq[RawAction]): Competition = Competition(
+  def fromRaw(competitionId: String, competitionName: String, rawActions: Seq[RawAction]): Competition = Competition(
     id = competitionId,
     name = competitionName,
-    matches = matches.groupBy(_.matchId).toSeq.map {
+    matches = rawActions.groupBy(_.matchId).toSeq.map {
       case (id, actions) =>
-        Match.fromRaw(id = id, time = actions.head.date, actions = actions)
+        Match.fromRaw(
+          id = id,
+          time = actions.head.date,
+          actions = actions
+        )
     }
   )
 }

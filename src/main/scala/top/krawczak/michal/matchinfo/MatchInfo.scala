@@ -4,47 +4,44 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akkahttptwirl.TwirlSupport
-import com.github.tototoshi.csv._
-import top.krawczak.michal.matchinfo.domain.{DataSet}
-import top.krawczak.michal.matchinfo.domain.raw.RawAction
-import top.krawczak.michal.matchinfo.server.Routes
+import input.CSVDataLoader
+import server.Routes
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.io.Source
 
-object MatchInfo extends TwirlSupport with Routes {
+/**
+  * Main class. Launches server at localhost:8080.
+  *
+  * @todo make the host and port configurable
+  */
+object MatchInfo extends TwirlSupport with CSVDataLoader with Routes {
   /**
     * Location of the dataset (in CSV) inside resources dir.
     *
     * @todo should be configurable (e.g. via typesafe config)
     */
-  val datasetLocation = "dataset.csv"
+  protected val datasetLocation = "dataset.csv"
 
   /**
     * Port to listen to.
     *
     * @todo should be configurable (e.g. via typesafe config)
     */
-  val port = 8080
+  private[this] val port = 8080
 
   /**
     * Service host.
     *
     * @todo should be configurable (e.g. via typesafe config)
     */
-  val host = "localhost"
+  private[this] val host = "localhost"
 
-  lazy val data: DataSet = {
-    val reader = CSVReader open (Source fromResource datasetLocation)
-    val rawData = reader.toStreamWithHeaders map RawAction.fromMap
-    DataSet fromRaw rawData
-  }
 
   def main(args: Array[String]): Unit = {
     implicit val system: ActorSystem = ActorSystem()
     implicit val executor: ExecutionContextExecutor = system.dispatcher
     implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-    Http().bindAndHandle(routes, host, port)
+    Http().bindAndHandle(routes(data), host, port)
   }
 }
